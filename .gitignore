@@ -1,0 +1,12 @@
+# Vendor SDK (private, never commit)
+vendor/
+
+# Build output
+target/
+cmake-build-*/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.iml
