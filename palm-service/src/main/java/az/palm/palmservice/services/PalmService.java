@@ -28,8 +28,7 @@ public class PalmService {
     private final PalmUserRepository palmUserRepository;
     private final PalmSDKService palmSDKService;
     private final RestTemplate restTemplate;
-
-    private final WebClient webClient = WebClient.builder().build();
+    private final WebClient webClient;
 
 
 

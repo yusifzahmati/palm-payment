@@ -64,7 +64,7 @@ export DB_PASSWORD=your_password        # required, same value as in .env
 ./mvnw spring-boot:run
 ```
 
-The API listens on `http://localhost:8080`. Hibernate creates and updates the tables on startup (`ddl-auto: update`).
+The API listens on `http://localhost:8080`. Flyway applies the schema migrations in `palm-service/src/main/resources/db/migration` on startup, and Hibernate validates the entities against the result (`ddl-auto: validate`). Databases previously created by Hibernate are baselined automatically.
 
 ### 3. Build and run `palm-rest-api`
 
@@ -195,6 +195,18 @@ This is an internal service and should not be exposed publicly.
 
 The response includes `success`, `message`, `matchedTemplateId`, `matchedFinCode`, `irScore`, `rgbScore`, `irThreshold`, `rgbThreshold` and `palmType`. It returns `400` if `candidates` is missing or contains no valid entry.
 
+## Database migrations
+
+Schema changes are versioned with [Flyway](https://flywaydb.org). To change the schema, add a new file such as `V2__add_column.sql` under `palm-service/src/main/resources/db/migration`. Never edit a migration that has already been applied.
+
+## Tests
+
+```bash
+cd palm-service
+./mvnw test -Dtest=PalmServiceTest      # unit tests, no database needed
+./mvnw test                             # also runs the context-load test, which needs PostgreSQL and DB_PASSWORD
+```
+
 ## Project structure
 
 ```
@@ -231,6 +243,5 @@ Released under the [MIT License](LICENSE). The proprietary VP930 SDK is not cove
 - Biometric templates are stored as base64 text in the database, unencrypted.
 - `identify` sends every stored template to the scanner on each request, so it does not scale to large user bases.
 - The scanner URL and CORS origin are hardcoded.
-- The schema is managed by Hibernate `ddl-auto: update` rather than migrations.
 - `palm-rest-api` only builds on Windows.
 - Test coverage is minimal.
