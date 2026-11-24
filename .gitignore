@@ -10,3 +10,6 @@ build/
 .idea/
 .vscode/
 *.iml
+
+# Local secrets
+.env

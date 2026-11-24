@@ -47,15 +47,20 @@ Both services must run on the machine the scanner is attached to. `palm-service`
 
 ### 1. Database
 
+Start PostgreSQL with Docker Compose:
+
 ```bash
-createdb palm
+cp .env.example .env        # then edit .env and set DB_PASSWORD
+docker compose up -d
 ```
+
+This runs PostgreSQL 16 on port `5432` with a `palm` database and a persistent volume. Without Docker, run `createdb palm` on an existing PostgreSQL instead.
 
 ### 2. Run `palm-service`
 
 ```bash
 cd palm-service
-export DB_PASSWORD=your_password        # required
+export DB_PASSWORD=your_password        # required, same value as in .env
 ./mvnw spring-boot:run
 ```
 
@@ -215,6 +220,10 @@ The VP930 SDK is proprietary and is not part of this repository. To build `palm-
     palm-rest-api/vendor/vp930_sdk/lib
 
 `vendor/` is git-ignored.
+
+## License
+
+Released under the [MIT License](LICENSE). The proprietary VP930 SDK is not covered by it.
 
 ## Known limitations
 
